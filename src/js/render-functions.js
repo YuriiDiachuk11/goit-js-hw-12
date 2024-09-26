@@ -23,9 +23,14 @@ export function createMarkup({ webformatURL, largeImageURL, tags, likes, views, 
     </div>`;
 }
 
-export function renderImages(images, container) {
-  const imagesMarkup = images.map(createMarkup).join('');
-  container.innerHTML = imagesMarkup;
-
-  lightbox.refresh();  
-}
+export function renderImages(images, container, append = false) {
+    const imagesMarkup = images.map(createMarkup).join("");
+  
+    if (append) {
+      container.insertAdjacentHTML("beforeend", imagesMarkup); 
+    } else {
+      container.innerHTML = imagesMarkup; 
+    }
+  
+    lightbox.refresh(); 
+  }

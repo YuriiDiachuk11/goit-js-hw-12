@@ -4,10 +4,9 @@ export const API_KEY = "46069437-f48122ef32c6bd1c27031b929";
 
 import axios from 'axios';
 
+export async function fetchPixabay(searchQuery, page = 1) {
+    const URL = `${BASE_URL}?key=${API_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&orientation=horizontal&safesearch=true&per_page=15&page=${page}`;
 
-export async function fetchPixabay(searchQuery) {
-    const URL = `${BASE_URL}?key=${API_KEY}&q=${encodeURIComponent(searchQuery)}&image_type=photo&orientation=horizontal&safesearch=true`;
-  
     try {
         const response = await axios.get(URL);
         return response.data;

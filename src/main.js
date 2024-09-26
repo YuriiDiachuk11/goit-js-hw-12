@@ -2,21 +2,25 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 import { fetchPixabay } from "./js/pixabay-api.js";
 import { renderImages } from "./js/render-functions.js";
-import axios from 'axios';
 
+let page = 1; 
+let query = null; 
+let totalHits = 0; 
 
 const refs = {
   form: document.querySelector(".form"),
   gallery: document.querySelector(".gallery"),
   loader: document.querySelector(".loader"),
+  loadButton: document.querySelector(".load-button"), 
 };
 
 refs.form.addEventListener("submit", onFormSubmit);
+refs.loadButton.addEventListener("click", onLoadButtonClick);
 
 async function onFormSubmit(event) {
   event.preventDefault();
 
-  const query = event.currentTarget.elements.query.value.trim();
+  query = event.currentTarget.elements.query.value.trim();
 
   if (query === "") {
     iziToast.show({
@@ -28,12 +32,14 @@ async function onFormSubmit(event) {
     return;
   }
 
+  page = 1;
   refs.gallery.innerHTML = "";
+  refs.loadButton.classList.add("hidden"); 
   showLoader();
 
   try {
-    const data = await fetchPixabay(query);
-    
+    const data = await fetchPixabay(query, page);
+
     if (data.hits.length === 0) {
       iziToast.show({
         title: 'No results',
@@ -42,7 +48,46 @@ async function onFormSubmit(event) {
         position: "bottomCenter"
       });
     } else {
+      totalHits = data.totalHits; 
       renderImages(data.hits, refs.gallery);
+
+      if (totalHits > page * 15) {
+        refs.loadButton.classList.remove("hidden"); 
+      }
+    }
+
+  } catch (error) { 
+    iziToast.show({
+      title: 'Error',
+      message: "Something went wrong. Please try again later.",
+      color: "#ef4040",
+      position: "bottomCenter"
+    });
+  } finally {
+    hideLoader();
+    refs.form.reset(); 
+  }
+}
+
+async function onLoadButtonClick(event) {
+  page += 1; 
+  showLoader();
+
+  try {
+    const data = await fetchPixabay(query, page);
+    
+    renderImages(data.hits, refs.gallery, true); 
+
+    scrollCollection(); 
+
+    if (totalHits <= page * 15) {
+      refs.loadButton.classList.add("hidden");
+      iziToast.show({
+        title: 'Error',
+        message: "We're sorry, but you've reached the end of search results.",
+        color: "#ef4040",
+        position: "bottomCenter"
+      });
     }
 
   } catch (error) {
@@ -54,14 +99,23 @@ async function onFormSubmit(event) {
     });
   } finally {
     hideLoader();
-    refs.form.reset();
   }
 }
 
 function showLoader() {
-  refs.loader.classList.remove("hidden");
+    refs.loader.classList.remove("hidden");
 }
-
+  
 function hideLoader() {
     refs.loader.classList.add("hidden");
-  }
+}
+
+function scrollCollection() {
+    const lastElementChild = refs.gallery.lastElementChild
+    const imageHeight = lastElementChild.getBoundingClientRect().height; 
+    window.scrollBy({
+        top: imageHeight * 2,
+        left: 0,
+        behavior: "smooth" 
+  });
+}
