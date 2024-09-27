@@ -15,11 +15,23 @@ export function createMarkup({ webformatURL, largeImageURL, tags, likes, views, 
         </a>
       </div>
       <div class="card-body">
-        <p class="card-text">Likes ${likes}</p>
-        <p class="card-text">Views ${views}</p>
-        <p class="card-text">Comments ${comments}</p>
-        <p class="card-text">Downloads ${downloads}</p>
-      </div>
+      <p class="card-text">
+        <span class="card-text-label">Likes: </span>
+        <span class="card-text-value">${likes}</span>
+      </p>
+      <p class="card-text">
+        <span class="card-text-label">Comments: </span>
+        <span class="card-text-value">${comments}</span>
+      </p>
+      <p class="card-text">
+        <span class="card-text-label">Views: </span>
+        <span class="card-text-value">${views}</span>
+      </p>
+      <p class="card-text">
+        <span class="card-text-label">Downloads: </span>
+        <span class="card-text-value">${downloads}</span>
+      </p>
+    </div>
     </div>`;
 }
 

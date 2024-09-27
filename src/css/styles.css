@@ -11,6 +11,8 @@
     box-sizing: border-box;
     border-radius: 4px;
     background-color: #fff;
+    font-size: 24px;
+    border: 1px solid #000;
   }
   .button{
     border-radius: 8px;
@@ -25,6 +27,7 @@
     color: #fff;
     box-sizing: border-box;
     cursor: pointer;
+    border: 1px solid transparent;
   }
   .button:hover {
     background-color: #6c8cff;
@@ -93,10 +96,9 @@
     padding: 8px;
     box-sizing: border-box;
   }
-  
+
   .card-text {
     font-family: "Montserrat", sans-serif;
-    font-weight: 600;
     font-size: 12px;
     line-height: 1.33;
     letter-spacing: 0.04em;
@@ -104,6 +106,13 @@
     text-align: center;
     margin: 0;
   }
+  .card-text-label {
+    font-weight: 700;
+    }
+  
+  .card-text-value {
+    font-weight: 400; 
+    }
   
   .loader {
     /* position: fixed; */
